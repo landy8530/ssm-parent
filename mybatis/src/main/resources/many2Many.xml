@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE com.landy.ssm.mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-com.landy.ssm.mapper.dtd">
+<com.landy.ssm.mapper namespace="com.landy.ssm.com.landy.ssm.mapper.Many2Many">
+
+	<!-- n+1次访问数据库 -->
+	<resultMap type="com.landy.ssm.entity.m2m.Students" id="stuMap2">
+		<id column="id" property="id"/>
+		<result column="name" property="name" />
+		<collection property="courses" javaType="java.util.List"
+			ofType="com.landy.ssm.entity.m2m.Courses"
+			select="com.landy.ssm.com.landy.ssm.mapper.Many2Many.selectCoursesByStudent"
+			column="id"></collection>
+	</resultMap>
+	<select id="selectStudents" resultMap="stuMap2">
+		select id, name from tb_student
+	</select>
+	<!-- 根据学生的ID,查询选课信息 -->
+	<select id="selectCoursesByStudent" resultType="com.landy.ssm.entity.m2m.Courses">
+		select
+			c.id, c.name, c.teacherName
+		from
+			tb_course c
+				left join
+			tb_stu_cour sc
+				on c.id = sc.cour_id
+		where
+			sc.stu_id = #{studentId}
+	</select>
+
+	<!-- 1次访问数据库,查询所有学生, 同时查询课程集合 -->
+	<resultMap type="com.landy.ssm.entity.m2m.Students" id="stuMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name" />
+		<collection property="courses" javaType="java.util.List"
+			ofType="com.landy.ssm.entity.m2m.Courses">
+			<!-- 描述行数据字段和泛型对象中属性的关联 -->
+			<id column="cid" property="id"/>
+			<result column="cname" property="name" />
+			<result column="teacherName" property="teacherName" />
+		</collection>
+	</resultMap>
+	<select id="selectAllStudents" resultMap="stuMap">
+		select 
+			s.id, s.name,
+			c.id as cid, c.name as cname, c.teacherName
+		from 
+			tb_student s
+				left join
+			tb_stu_cour sc
+				on s.id = sc.stu_id
+				left join
+			tb_course c
+				on c.id = sc.cour_id
+	</select>
+	
+</com.landy.ssm.mapper>

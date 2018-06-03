@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE com.landy.ssm.mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-com.landy.ssm.mapper.dtd">
+<com.landy.ssm.mapper namespace="com.landy.ssm.com.landy.ssm.mapper.One2One">
+
+	<!-- n+1次访问数据库,查询所有公民 -->
+	<resultMap type="com.landy.ssm.entity.o2o.Person" id="personMap2">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="birthday" property="birthday"/>
+		<!-- 关系数据使用association描述。代表关系数据是一个引用对象。、
+			property - 是当前类型中关系对象的属性名称。
+			javaType - 关系对象的具体类型。
+			select - 当前关联对象数据使用什么SQL语句查询数据。
+			column - 执行查询关联数据对象SQL时，传递的参数。如果传递一个参数可以直接定义当前查询的字段名。
+				如果传递的是多个数据，使用Map的toString格式定义：{参数名称=字段名称,参数名称=字段名称}
+		 -->
+		<association property="card" javaType="com.landy.ssm.entity.o2o.PersonCard"
+			select="com.landy.ssm.com.landy.ssm.mapper.One2One.selectPersonCardByPerson"
+			column="{personId=id}"/>
+	</resultMap>
+	<select id="selectPersons" resultMap="personMap2">
+		select id, name, birthday from tb_person
+	</select>
+	<!-- 根据外键查询身份证 -->
+	<select id="selectPersonCardByPerson" resultType="com.landy.ssm.entity.o2o.PersonCard">
+		select id, name, card_no as cardNo, address 
+		from tb_person_card
+		where person_id = #{personId}
+	</select>
+	
+
+	<!-- 1次访问数据库,查询所有公民 -->
+	<resultMap type="com.landy.ssm.entity.o2o.Person" id="personMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="birthday" property="birthday"/>
+		<!-- 描述关联属性。 -->
+		<association property="card" javaType="com.landy.ssm.entity.o2o.PersonCard">
+			<id column="pcid" property="id"/>
+			<result column="pcname" property="name"/>
+			<result column="pcCardNo" property="cardNo"/>
+			<result column="pcAddress" property="address" />
+		</association>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="personMap">
+		select 
+			p.id,p.name,p.birthday,
+			pc.id as pcid, pc.name as pcname, pc.card_no as pcCardNo,
+			pc.address as pcAddress
+		from 
+			tb_person p
+				left join
+			tb_person_card pc
+				on p.id = pc.person_id
+	</select>
+
+	<!-- 查询所有公民 -->
+	<select id="selectAllPerson" resultType="com.landy.ssm.entity.o2o.Person">
+		select 
+			p.id,p.name,p.birthday,
+			pc.id as `card.id`, pc.name as `card.name`, pc.card_no as `card.cardNo`, 
+			pc.address as `card.address` 
+		from 
+			tb_person p
+				left join
+			tb_person_card pc
+				on p.id = pc.person_id
+	</select>
+	
+</com.landy.ssm.mapper>

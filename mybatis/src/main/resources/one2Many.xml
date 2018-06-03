@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE com.landy.ssm.mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-com.landy.ssm.mapper.dtd">
+<com.landy.ssm.mapper namespace="com.landy.ssm.com.landy.ssm.mapper.One2Many">
+
+	<!-- 1次查询 -->
+	<resultMap type="com.landy.ssm.entity.o2m.Student" id="stuMap">
+		<id column="sid" property="id"/>
+		<result column="sname" property="name" />
+		<result column="age" property="age" />
+		<association property="classes" javaType="com.landy.ssm.entity.o2m.Classes">
+			<id column="id" property="id"/>
+			<result column="name" property="name" />
+			<result column="teacherName" property="teacherName" />
+		</association>
+	</resultMap>
+	<select id="selectAllStudnets" resultMap="stuMap">
+		select 
+			c.id, c.name, c.teacherName,
+			s.id as sid, s.name as sname, s.age
+		from
+			tb_cls c
+				right join
+			tb_stu s
+				on c.id = s.cls_id
+	</select>
+
+	<!-- n+1次访问数据库 -->
+	<resultMap type="com.landy.ssm.entity.o2m.Classes" id="clsMap2">
+		<id column="id" property="id"/>
+		<result column="name" property="name" />
+		<result column="teacherName" property="teacherName" />
+		<!-- collection ： 用于描述集合关联数据。
+			property ： 集合关联数据属性名。
+			JavaType ： 集合关联数据属性类型。
+			ofType ： 集合的泛型。 关联数据对象的真实类型。
+			select ： 关联数据的查询语法
+			column ： 关系数据查询语法中需要的参数
+		 -->
+		<collection property="students" javaType="java.util.List"
+			ofType="com.landy.ssm.entity.o2m.Student"
+			select="com.landy.ssm.com.landy.ssm.mapper.One2Many.selectStudentsByClass"
+			column="id"/>
+	</resultMap>
+	<select id="selectAll" resultMap="clsMap2">
+		select 
+			c.id, c.name, c.teacherName
+		from
+			tb_cls c
+	</select>
+	<!-- 外键查询学生. 根据班级查询学生 -->
+	<select id="selectStudentsByClass" resultType="com.landy.ssm.entity.o2m.Student">
+		select id, name, age
+		from tb_stu
+		where cls_id = #{clsId}
+	</select>
+	
+	<!-- 1次访问数据库 -->
+	<resultMap type="com.landy.ssm.entity.o2m.Classes" id="clsMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name" />
+		<result column="teacherName" property="teacherName" />
+		<collection property="students" javaType="java.util.List"
+				ofType="com.landy.ssm.entity.o2m.Student">
+			<!-- 定义每行字段对应集合泛型对象的什么属性. -->
+			<id column="sid" property="id"/>
+			<result column="sname" property="name" />
+			<result column="age" property="age" />
+		</collection>
+	</resultMap>
+	<select id="selectAllClasses" resultMap="clsMap">
+		select 
+			c.id, c.name, c.teacherName,
+			s.id as sid, s.name as sname, s.age
+		from
+			tb_cls c
+				left join
+			tb_stu s
+				on c.id = s.cls_id
+	</select>
+	
+</com.landy.ssm.mapper>
