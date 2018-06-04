@@ -1,6 +1,6 @@
 package com.landy.ssm.controller;
 
-import com.landy.ssm.commons.EasyUIDatagrid;
+import com.landy.ssm.commons.EasyUIDataGrid;
 import com.landy.ssm.commons.ResultMessage;
 import com.landy.ssm.pojo.User;
 import com.landy.ssm.service.UserService;
@@ -46,14 +46,14 @@ public class UserController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/user/listUsers")
 	@ResponseBody
-	public EasyUIDatagrid<User> listUsers(int page, int rows){
+	public EasyUIDataGrid<User> listUsers(int page, int rows){
 		ResultMessage result = this.userService.listUsers(page, rows);
 		
 		if(result.getStatus() != 200){
-			return new EasyUIDatagrid<User>();
+			return new EasyUIDataGrid<User>();
 		}
 		
-		return (EasyUIDatagrid<User>)result.getData();
+		return (EasyUIDataGrid<User>)result.getData();
 	}
 	
 }

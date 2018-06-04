@@ -2,7 +2,7 @@ package com.landy.ssm.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.landy.ssm.commons.EasyUIDatagrid;
+import com.landy.ssm.commons.EasyUIDataGrid;
 import com.landy.ssm.commons.ResultMessage;
 import com.landy.ssm.mapper.UserMapper;
 import com.landy.ssm.pojo.User;
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 		
 		PageInfo<User> infos = new PageInfo<>(userList);
 		
-		EasyUIDatagrid<User> pageInfo = new EasyUIDatagrid<>(infos.getTotal(), userList);
+		EasyUIDataGrid<User> pageInfo = new EasyUIDataGrid<>(infos.getTotal(), userList);
 		
 		return ResultMessage.ok(pageInfo);
 	}
