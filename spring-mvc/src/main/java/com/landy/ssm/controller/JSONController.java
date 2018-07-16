@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/json/brands")
 public class JSONController {
-
+    //https://www.cnblogs.com/solverpeng/p/5821726.html
     @RequestMapping(value="{name}", method = RequestMethod.GET)
     @ResponseBody
     public Shop getShopInJSON(@PathVariable String name) {
