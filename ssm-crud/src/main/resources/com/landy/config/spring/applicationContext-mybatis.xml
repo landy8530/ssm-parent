@@ -19,18 +19,18 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 		<property name="url" value="jdbc:mysql://localhost:3306/ssm"/>
 		<property name="username" value="root"/>
-		<property name="password" value="root"/>
+		<property name="password" value="landy"/>
 	</bean>
 	
 	<!-- 会话工厂 必须使用MyBatis-spring整合jar包中的工厂bean。 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 加载本地的MyBatis配置文件。为了加载pagehelper插件。 -->
-		<property name="configLocation" value="classpath:com/sxt/config/mybatis/mybatis-config.xml"></property>
+		<property name="configLocation" value="classpath:com/landy/config/mybatis/mybatis-config.xml"></property>
 		<property name="dataSource" ref="dataSource"></property>
 		<!-- 本地映射。非必要。 -->
 		<property name="mapperLocations">
 			<array>
-				<value>classpath:com/sxt/mapper/*.xml</value>
+				<value>classpath:com/landy/mapper/*.xml</value>
 			</array>
 		</property>
 	</bean>
@@ -38,7 +38,7 @@
 	<!-- Mapper工厂 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
-		<property name="basePackage" value="com.landy.mapper"></property>
+		<property name="basePackage" value="com.landy.ssm.mapper"></property>
 	</bean>
 
 </beans>
