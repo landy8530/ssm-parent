@@ -11,18 +11,17 @@
 
 <script>
     $(function() {
-      var data = [{ "name": "Brett", "age":"12" }, { "name": "Jason", "age":"23" }, { "name": "Elliotte", "age":"33" }];
+      var personList = [];
+      personList.push({name: "李四",age: "23"});
+      personList.push({name: "张三",age: "12"});
       $('.ajax-button').click(function() {
         $.ajax({
-            url: "testJsonList.do",
+            url: "testJsonListWithNonForm.do",
             type:"post",
-            //data: '[{ "name": "Brett", "age":"12" }, { "name": "Jason", "age":"23" }, { "name": "Elliotte", "age":"33" }]',
-            data :  JSON.stringify(data),
+            data :  JSON.stringify(personList),
             contentType: "application/json; charset=utf-8",
             success: function(data) {
-                //alert(data)
                 var json = JSON.stringify(data, null, 4);
-                //alert(json)
                 $('#response').html(json);
                 console.log(json);
             },
@@ -52,19 +51,12 @@
     </div>
     <div>
         <p style="text-align: left; margin: 40px 0; color:blue">
-             对于Person数组来说，需要发送什么样的格式才能被 SpringMVC 直接处理？<br>
-            （1）需要指定 "contentType"，同时需要注意的是：发送的请求数据不在 Form data 中，而是在 Request Payload 中。关于 [Request Payload] ，在后面说明。<br>
-            （2）必须要指定 @RequestBody ，否则无法解析。<br>
+             （1）说明： <br>
+             上面说的两个例子，仅仅是最简单的一种形式。现在对其进行扩展，在四里，所说的 SpringMVC 如何处理这些数据，不仅仅指的是SpringMVC，也包括SpringMVC处理不了，使用第三方来处理，或者第三方处理不了，我自己来处理。
+             同时这里的数据也不仅仅指的 JSON 类型的数据。
         </p>
         <p  style="text-align: left; margin: 40px 0; color:blue">
-            HTTP 400 错误 - 请求无效 (Bad request) <br>
-            在ajax请求后台数据时有时会报 HTTP 400 错误 - 请求无效 (Bad request);出现这个请求无效报错说明请求没有进入到后台服务里；<br>
-            原因：<br>
-                 1）前端提交数据的字段名称或者是字段类型和后台的实体类不一致，导致无法封装；<br>
-                 2）前端提交的到后台的数据应该是json字符串类型，而前端没有将对象转化为字符串类型；<br>
-            解决方案：<br>
-                1）对照字段名称，类型保证一致性<br>
-                2）使用stringify将前端传递的对象转化为字符串    data: JSON.stringify(param)  ;<br>
+           （2）对于非表单的 Ajax 提交，这里只提供比较简单的一种方式。还是以上面的 Person 为例。(其实跟testJsonListWithAjax.jsp效果一样)<br>
         </p>
     </div>
 </body>

@@ -1,6 +1,7 @@
 package com.landy.ssm.controller;
 
 import com.landy.ssm.domain.Person;
+import com.landy.ssm.domain.Student;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,9 +34,23 @@ public class AjaxController {
     //（2）必须要指定 @RequestBody ，否则无法解析。
     @ResponseBody
     @RequestMapping(path = "/testJsonList",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String testJsonList(@RequestBody List<Person> persons) {
+    public List<Person> testJsonList(@RequestBody List<Person> persons) {
         System.out.println("persons:" + persons);
+        return persons;//"success";
+    }
+
+    @ResponseBody
+    @RequestMapping("/testJsonListWithNonForm")
+    public String testJsonListWithNonForm(@RequestBody List<Person> persons) {
+        System.out.println(persons);
         return "success";
+    }
+
+    @ResponseBody
+    @RequestMapping("/testStudent")
+    public Student testStudent(@RequestBody Student student) {
+        System.out.println(student);
+        return student;
     }
 
 }

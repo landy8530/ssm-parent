@@ -24,6 +24,7 @@
                 var json = JSON.stringify(data, null, 4);
                 //alert(json)
                 $('#response').html(json);
+                console.log(json);
             },
             error : function(e) {
                 var json = JSON.stringify(e, null, 4);
