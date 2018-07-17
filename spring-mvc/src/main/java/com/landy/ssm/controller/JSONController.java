@@ -21,7 +21,7 @@ public class JSONController {
     public Shop getShopInJSON(@PathVariable String name) {
         Shop shop = new Shop();
         shop.setName(name);
-        shop.setStaffName(new String[]{"mkyong1", "mkyong2"});
+        shop.setStaffName(new String[]{"landy1", "landy2"});
         return shop;
     }
 
