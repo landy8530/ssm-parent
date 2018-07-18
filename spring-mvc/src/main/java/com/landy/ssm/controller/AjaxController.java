@@ -2,12 +2,10 @@ package com.landy.ssm.controller;
 
 import com.landy.ssm.domain.Person;
 import com.landy.ssm.domain.Student;
+import com.landy.ssm.utils.JsonUtil;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,11 +44,102 @@ public class AjaxController {
         return "success";
     }
 
+    /**
+     * 前台使用 serializeObject()序列化后的值，通过SpringMVC自身进行处理
+     * 请求参数存放在 [Request Payload] 中
+     * @param student
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/testStudent")
     public Student testStudent(@RequestBody Student student) {
         System.out.println(student);
         return student;
+    }
+
+    /**
+     * 前台使用 serializeObject()序列化后的值，引入第三方 Jar 包进行处理。
+     * 请求参数存放在 [Request Payload] 中
+     * @param inputBody
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/testStudentThirdParty")
+    public Student testStudentThirdParty(@RequestBody String inputBody) {
+        Student student = JsonUtil.fromJson(inputBody, Student.class);
+        System.out.println(student);
+        return student;//"success";
+    }
+
+    /**
+     * 请求参数存放在 Form Data 中。
+     * 不需要指定@RequestBody，并且consumes也不用指定
+     * @param student
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(path = "/testStudentSerialize")
+    public Student testStudentSerialize(Student student) {
+        System.out.println(student);
+        return student;//"success";
+    }
+
+    @RequestMapping("/testJsonListWithAjaxFormSerializePage")
+    public String testJsonListWithAjaxFormSerializePage() {
+        return "testJsonListWithAjaxFormSerializePage";
+    }
+
+    @RequestMapping("/complexDataPage")
+    public String complexDataPage() {
+        return "complexDataPage";
+    }
+
+    /**
+     * 后端处理：使用第三方工具类进行解析
+     * 请求参数存放在 Form Data 中。
+     * @param studentStr
+     * @param amount
+     * @return
+     */
+    @RequestMapping("/testStudentWithComplexData")
+    public String testStudentWithComplexData(@RequestParam("student") String studentStr, String amount) {
+        Student student = JsonUtil.fromJson(studentStr, Student.class);
+        System.out.println("student:" + student);
+        System.out.println("amount：" + amount);
+        return "success";
+    }
+
+    @RequestMapping("/complexDataWithSerializePage")
+    public String complexDataWithSerializePage() {
+        return "complexDataWithSerializePage";
+    }
+
+    /**
+     * 直接让SpringMVC 来解析，请求无法到达
+     * 出现500错误
+     * @param student
+     * @param amount
+     * @return
+     */
+//    @RequestMapping("/testStudentWithComplexDataSerialize")
+//    public String testStudentWithComplexDataSerialize(@RequestParam("student") Student student, String amount) {
+//        System.out.println("student:" + student);
+//        System.out.println("amount：" + amount);
+//        return "success";
+//    }
+
+    /**
+     * 把@RequestParam注解去除，请求可以正常到达目标 Handler方法,无法映射student对象.
+     * 解决方案：自己解析，编写自定义的类型转换器
+     * @param student
+     * @param amount
+     * @return
+     */
+    @RequestMapping("/testStudentWithComplexDataSerialize")
+    public String testStudentWithComplexDataSerialize(Student student, String amount) {
+        System.out.println("student:" + student);
+        System.out.println("amount：" + amount);
+        return "success";
     }
 
 }

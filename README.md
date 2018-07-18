@@ -11,6 +11,8 @@ mvn install:install-file -Dfile=D:\tmp\pagehelper-4.1.6.jar -DgroupId=com.github
 
 转自：https://www.cnblogs.com/solverpeng/p/5821726.html
 
+http://www.mkyong.com/tutorials/spring-mvc-tutorials/
+
 ### 2.1 首先要搞明白的一些事情。
 
 1.从客户端来看，需要搞明白：
@@ -94,3 +96,18 @@ Spring 的 HttpMessageConverter<T> 负责将请求信息转换为一个对象，
 ### 2.3 发送客户端Json数据
 
 上面简单介绍了 SpringMVC 是怎么处理 JSON 数据的，现在来看第二个问题：发送什么样格式的 JSON 数据才能被服务器端的 SpringMVC 很便捷的处理，这里主要指的是请求的 JSON 字符串和实体的映射。
+
+
+六、Request Payload
+
+（1）出现的条件：
+
+contentType: 'application/json;charset=utf-8'
+
+type:post
+
+（2）具体请参看
+
+http://xiaobaoqiu.github.io/blog/2014/09/04/form-data-vs-request-payload/
+
+（3）建议尽量不要手动的去处理此种情况，能选用别的方式避免就尽量避免。

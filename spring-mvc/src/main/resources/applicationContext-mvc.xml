@@ -12,7 +12,19 @@
 
 	<context:component-scan base-package="com.landy.ssm.controller" />
 	
-	<mvc:annotation-driven />
+	<mvc:annotation-driven conversion-service="conversionService"/>
+
+	<!-- 定义自定义类型转换器的bean -->
+	<bean id="conversionService"
+		  class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<!-- 这里是我们自己定义的类型转换器 -->
+				<!-- 注意，这里首字母要小写，因为springmvc帮我们创建bean的时候，是以类名首字母小写命名 -->
+				<ref bean="string2StudentConverter"/>
+			</set>
+		</property>
+	</bean>
 
 	<!--由于spring mvc拦截了所有请求，所以当你设置引用-->
 	<!--<servlet-mapping>-->
@@ -32,6 +44,24 @@
 		<property name="prefix" value="/WEB-INF/jsp/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
+
+	<!--只适用于spring 4.x-->
+	<!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
+		<!--<property name="messageConverters">-->
+			<!--<list>-->
+				<!--<ref bean="jsonHttpMessageConverter" />-->
+			<!--</list>-->
+		<!--</property>-->
+	<!--</bean>-->
+
+	<!--<bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
+		<!--<property name="supportedMediaTypes">-->
+			<!--<list>-->
+				<!--<value>application/json;charset=UTF-8</value>-->
+			<!--</list>-->
+		<!--</property>-->
+	<!--</bean>-->
+
 
 </beans>
 
