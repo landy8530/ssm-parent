@@ -35,7 +35,7 @@
 		</property>
 	</bean>
 	
-	<!-- Mapper工厂 -->
+	<!-- Mapper工厂 将Mapper接口生成代理注入到Spring -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 		<property name="basePackage" value="com.landy.ssm.mapper"></property>
